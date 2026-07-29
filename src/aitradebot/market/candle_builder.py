@@ -50,3 +50,15 @@ class CandleBuilder:
             return []
 
         return []
+
+    def _update_current_candle(
+        self,
+        tick: Tick,
+    ) -> None:
+        assert self._current is not None
+
+        self._current.high = max(self._current.high, tick.price)
+        self._current.low = min(self._current.low, tick.price)
+        self._current.close = tick.price
+        self._current.volume += tick.volume
+        self._current.end_time = tick.timestamp
