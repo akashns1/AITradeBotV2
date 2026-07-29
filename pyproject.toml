@@ -3,7 +3,7 @@ name = "aitradebot-v2"
 version = "2.0.0-alpha"
 description = "Professional event-driven algorithmic trading platform"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.14"
 
 dependencies = [
     "pydantic>=2.11",
@@ -16,9 +16,12 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.black]
+target-version = ["py314"]
+
 [tool.ruff]
 line-length = 100
-target-version = "py312"
+target-version = "py314"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

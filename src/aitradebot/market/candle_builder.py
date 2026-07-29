@@ -40,7 +40,7 @@ class CandleBuilder:
             close=tick.price,
             volume=tick.volume,
             start_time=start,
-            end_time=start + timedelta(minutes=2),
+            end_time=start + timedelta(minutes=self._timeframe.minutes),
         )
 
     def process(
@@ -75,10 +75,6 @@ class CandleBuilder:
         self._current.volume += tick.volume
         self._current.end_time = tick.timestamp
 
-    def _get_candle_start(
-        self,
-        timestamp: datetime,
-    ) -> datetime: ...
     def _get_candle_start(
         self,
         timestamp: datetime,
