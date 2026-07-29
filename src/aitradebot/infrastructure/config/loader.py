@@ -10,6 +10,8 @@ from aitradebot.infrastructure.config.exceptions import (
     ConfigurationValidationError,
 )
 from aitradebot.infrastructure.config.models import Settings
+
+
 class ConfigLoader:
     """Loads application configuration from YAML."""
 
