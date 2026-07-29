@@ -1,3 +1,4 @@
+from aitradebot.application.events import CandleCompletedEvent
 from aitradebot.application.events.event_bus import EventBus
 from aitradebot.domain.common import Instrument, TimeFrame
 from aitradebot.domain.market import Candle, Tick
@@ -27,4 +28,14 @@ class MarketEngine:
         tick: Tick,
     ) -> list[Candle]:
         context = self._contexts[tick.instrument]
-        return context.process_tick(tick)
+
+        candles = context.process_tick(tick)
+
+        for candle in candles:
+            self._event_bus.publish(
+                CandleCompletedEvent(
+                    candle=candle,
+                )
+            )
+
+        return candles
