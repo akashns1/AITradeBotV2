@@ -1,0 +1,15 @@
+application:
+  name: AITradeBotV2
+  version: 2.0.0
+
+market:
+  timeframe: 2m
+
+risk:
+  max_risk_percent: 1.0
+
+broker:
+  mode: paper
+
+logging:
+  level: INFO
