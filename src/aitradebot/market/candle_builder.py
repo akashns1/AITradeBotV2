@@ -1,9 +1,9 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from aitradebot.domain.common import Instrument, TimeFrame
 from aitradebot.domain.market import Candle, Tick
-from datetime import timedelta
+
 
 @dataclass(slots=True)
 class _BuildingCandle:
@@ -26,7 +26,6 @@ class CandleBuilder:
         self._instrument = instrument
         self._timeframe = timeframe
         self._current: _BuildingCandle | None = None
-
 
     def _start_new_candle(
         self,
@@ -63,6 +62,7 @@ class CandleBuilder:
         self._update_current_candle(tick)
 
         return []
+
     def _update_current_candle(
         self,
         tick: Tick,
@@ -74,11 +74,11 @@ class CandleBuilder:
         self._current.close = tick.price
         self._current.volume += tick.volume
         self._current.end_time = tick.timestamp
+
     def _get_candle_start(
         self,
         timestamp: datetime,
-    ) -> datetime:
-        ... 
+    ) -> datetime: ...
     def _get_candle_start(
         self,
         timestamp: datetime,
@@ -90,9 +90,10 @@ class CandleBuilder:
             second=0,
             microsecond=0,
         )
+
     def _is_new_candle(
-    self,
-    tick: Tick,
+        self,
+        tick: Tick,
     ) -> bool:
         assert self._current is not None
 

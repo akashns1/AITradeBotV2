@@ -48,6 +48,8 @@ def test_multiple_ticks_do_not_emit_completed_candle() -> None:
 
     assert builder.process(tick1) == []
     assert builder.process(tick2) == []
+
+
 def test_emits_completed_candle_on_timeframe_boundary() -> None:
     builder = CandleBuilder(
         instrument=Instrument("NIFTY", "NSE"),

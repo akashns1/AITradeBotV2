@@ -11,3 +11,13 @@ class TimeFrame(StrEnum):
     THIRTY_MINUTES = "30m"
     ONE_HOUR = "1h"
     ONE_DAY = "1d"
+
+    @property
+    def minutes(self) -> int:
+        mapping = {
+            TimeFrame.ONE_MINUTE: 1,
+            TimeFrame.TWO_MINUTES: 2,
+            TimeFrame.FIVE_MINUTES: 5,
+        }
+
+        return mapping[self]
