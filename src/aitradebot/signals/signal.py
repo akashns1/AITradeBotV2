@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from datetime import datetime
 
 from aitradebot.domain.common import Instrument, TimeFrame
-
 from .signal_type import SignalType
 
 

@@ -20,6 +20,28 @@ def test_market_context_can_be_created() -> None:
 
     context = MarketContext(
         candle=candle,
+        indicators={},
     )
 
     assert context.candle == candle
+
+
+def test_market_context_stores_indicators() -> None:
+    candle = Candle(
+        instrument=Instrument("NIFTY", "NSE"),
+        timeframe=TimeFrame.TWO_MINUTES,
+        open=100,
+        high=110,
+        low=95,
+        close=105,
+        volume=100,
+        start_time=datetime(2026, 1, 1, 9, 0, tzinfo=UTC),
+        end_time=datetime(2026, 1, 1, 9, 2, tzinfo=UTC),
+    )
+
+    context = MarketContext(
+        candle=candle,
+        indicators={"EMA20": 101.25},
+    )
+
+    assert context.indicators["EMA20"] == 101.25
