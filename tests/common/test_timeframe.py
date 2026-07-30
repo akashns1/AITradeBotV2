@@ -10,3 +10,4 @@ def test_timeframe_minutes() -> None:
     assert TimeFrame.ONE_MINUTE.minutes == 1
     assert TimeFrame.TWO_MINUTES.minutes == 2
     assert TimeFrame.FIVE_MINUTES.minutes == 5
+    

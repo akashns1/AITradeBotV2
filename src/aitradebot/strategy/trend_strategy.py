@@ -28,5 +28,14 @@ class TrendStrategy:
             timeframe=context.timeframe,
             timestamp=context.timestamp,
         )
-
+        if (
+            context.analysis.trend == Trend.DOWN
+            and context.analysis.strength == TrendStrength.STRONG
+        ):
+            return Signal(
+                signal_type=SignalType.SELL,
+                instrument=context.instrument,
+                timeframe=context.timeframe,
+                timestamp=context.timestamp,
+            )
         raise NotImplementedError
