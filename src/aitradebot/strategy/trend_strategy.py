@@ -17,7 +17,9 @@ class TrendStrategy:
 
         if context.analysis.strength == TrendStrength.WEAK:
             return None
-
+        if not context.pullback.detected:
+            return None
+        
         if (
             context.analysis.trend == Trend.UP
             and context.analysis.strength == TrendStrength.STRONG
