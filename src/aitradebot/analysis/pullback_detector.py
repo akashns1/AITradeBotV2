@@ -4,7 +4,12 @@ from aitradebot.analysis.trend import Trend
 
 class PullbackDetector:
     def analyze(self, candles, trend: Trend) -> PullbackAnalysis:
-        if trend == Trend.UP and candles[-1].is_bearish:
+        last_candle = candles[-1]
+
+        if trend == Trend.UP and last_candle.is_bearish:
+            return PullbackAnalysis(detected=True)
+
+        if trend == Trend.DOWN and last_candle.is_bullish:
             return PullbackAnalysis(detected=True)
 
         return PullbackAnalysis(detected=False)
