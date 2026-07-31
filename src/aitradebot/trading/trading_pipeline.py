@@ -14,7 +14,9 @@ from aitradebot.trading.trade_decision_engine import (
     TradeDecision,
     TradeDecisionEngine,
 )
-
+from aitradebot.trading.stop_loss_calculator import (
+    StopLossCalculator,
+)
 
 class TradingPipeline:
     def __init__(
@@ -23,25 +25,36 @@ class TradingPipeline:
         swing_detector: SwingDetector,
         market_structure_analyzer: MarketStructureAnalyzer,
         trade_decision_engine: TradeDecisionEngine,
-    ) -> None:
+        stop_loss_calculator: StopLossCalculator,
+    ):
         self._event_bus = event_bus
         self._candles: list[Candle] = []
 
         self._swing_detector = swing_detector
         self._market_structure_analyzer = market_structure_analyzer
         self._trade_decision_engine = trade_decision_engine
+        self._stop_loss_calculator = stop_loss_calculator
+
 
     def handle_candle_completed(
         self,
         event: CandleCompletedEvent,
     ) -> None:
         self._candles.append(event.candle)
-
         decision = self.process(self._candles)
+        if decision.side == "NONE":
+            return
+
+        stop_loss = self._stop_loss_calculator.calculate(
+            decision,
+            event.candle,
+        )
 
         self._event_bus.publish(
             TradeDecisionEvent(
                 decision=decision,
+                candle=event.candle,
+                stop_loss=stop_loss,
             )
         )
 

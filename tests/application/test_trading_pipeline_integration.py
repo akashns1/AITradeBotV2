@@ -7,10 +7,15 @@ from aitradebot.application.events import (
 )
 from aitradebot.domain.common import Instrument, TimeFrame
 from aitradebot.domain.market import Candle
-
+from aitradebot.trading.trade_decision_engine import TradeDecision
 
 def test_pipeline_publishes_trade_decision_event():
     app = create_application()
+
+    app.trading_pipeline.process = lambda candles: TradeDecision(
+        action="BUY",
+        side="LONG",
+    )
 
     received = []
 
@@ -41,3 +46,4 @@ def test_pipeline_publishes_trade_decision_event():
     )
 
     assert len(received) == 1
+    assert received[0].decision.side == "LONG"

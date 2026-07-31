@@ -7,6 +7,9 @@ from aitradebot.trading.position_manager import PositionManager
 from aitradebot.trading.trade_factory import TradeFactory
 from aitradebot.trading.exit_reason import ExitReason
 from aitradebot.trading.position_factory import PositionFactory
+from aitradebot.application.events.trade_decision_event import (
+    TradeDecisionEvent,
+)
 
 class PaperTradeEngine:
     def __init__(self):
@@ -80,3 +83,20 @@ class PaperTradeEngine:
 
         if reason != ExitReason.NONE:
             self.close_position(current_price)
+    def handle_trade_decision(
+        self,
+        event: TradeDecisionEvent,
+    ) -> None:
+        """
+        Handles a trade decision published by the TradingPipeline.
+        """
+
+        
+        current_price = event.candle.close
+        stop_loss = event.stop_loss
+
+        self.process(
+            decision=event.decision,
+            current_price=current_price,
+            stop_loss=stop_loss,
+        )
