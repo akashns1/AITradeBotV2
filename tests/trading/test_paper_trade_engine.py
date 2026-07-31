@@ -13,7 +13,7 @@ def test_opens_long_position_on_buy_signal():
         stop_loss=98.0,
         risk_reward=2.0,
     )
-
+    
     assert engine.position is not None
     assert engine.position.side == "LONG"
     assert engine.position.entry_price == 100.0

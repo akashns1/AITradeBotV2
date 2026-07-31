@@ -16,6 +16,7 @@ def test_creates_long_position():
     assert position.entry_price == 100.0
     assert position.stop_loss == 98.0
     assert position.target_price == 104.0
+    
 def test_creates_short_position():
     factory = PositionFactory()
 
@@ -31,6 +32,7 @@ def test_creates_short_position():
     assert position.entry_price == 100.0
     assert position.stop_loss == 102.0
     assert position.target_price == 96.0
+
 def test_creates_position_with_quantity():
     factory = PositionFactory()
 

@@ -1,5 +1,5 @@
 from aitradebot.signals.signal_generator import TradingSignal
-
+from aitradebot.trading.trailing_stop_manager import TrailingStopManager
 from aitradebot.trading.trade import Trade
 from aitradebot.signals.signal_generator import TradingSignal
 from aitradebot.trading.position import Position
@@ -16,6 +16,7 @@ class PaperTradeEngine:
         self.position_manager = PositionManager()
         self.trade_factory = TradeFactory()
         self.position_factory = PositionFactory()
+        self.trailing_stop_manager = TrailingStopManager()
     @property
     def has_open_position(self) -> bool:
         return self.position is not None
@@ -67,6 +68,11 @@ class PaperTradeEngine:
     def on_price_update(self, current_price: float):
         if self.position is None:
             return
+
+        self.position = self.trailing_stop_manager.update(
+            self.position,
+            current_price,
+        )
 
         reason = self.position_manager.should_close(
             self.position,
