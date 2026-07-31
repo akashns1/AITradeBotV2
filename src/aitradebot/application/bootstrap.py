@@ -13,7 +13,11 @@ from aitradebot.trading.trade_decision_engine import (
     TradeDecisionEngine,
 )
 from aitradebot.trading.trading_pipeline import TradingPipeline
-
+from aitradebot.domain.market import Candle
+from aitradebot.trading.trade_decision_engine import (
+    TradeDecision,
+    TradeDecisionEngine,
+)
 
 @dataclass
 class Application:

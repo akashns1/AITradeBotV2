@@ -1,8 +1,8 @@
 from aitradebot.trading.position import Position
 from aitradebot.trading.trailing_stop_manager import TrailingStopManager
-from aitradebot.signals.signal_generator import TradingSignal
+from aitradebot.trading.trade_decision_engine import TradeDecision
 from aitradebot.trading.paper_trade_engine import PaperTradeEngine
-from aitradebot.analysis.swing_detector import SwingPoint
+
 
 def test_moves_long_stop_loss_up():
     manager = TrailingStopManager()
@@ -61,7 +61,10 @@ def test_long_position_trails_stop_loss():
     engine = PaperTradeEngine()
 
     engine.process(
-        TradingSignal(action="BUY"),
+        TradeDecision(
+            action="BUY",
+            side="LONG",
+        ),
         current_price=100.0,
         stop_loss=98.0,
         risk_reward=2.0,
@@ -112,7 +115,10 @@ def test_long_position_trails_stop_to_level():
     engine = PaperTradeEngine()
 
     engine.process(
-        TradingSignal(action="BUY"),
+        TradeDecision(
+            action="BUY",
+            side="LONG",
+        ),
         current_price=100,
         stop_loss=98,
         risk_reward=2,
@@ -129,7 +135,10 @@ def test_on_price_update_trails_long_stop():
     engine = PaperTradeEngine()
 
     engine.process(
-        TradingSignal(action="BUY"),
+        TradeDecision(
+            action="BUY",
+            side="LONG",
+        ),
         current_price=100,
         stop_loss=98,
         risk_reward=2,

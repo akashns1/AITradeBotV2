@@ -15,6 +15,7 @@ def test_returns_buy_for_bullish_bos():
     decision = TradeDecisionEngine().decide(structure)
 
     assert decision.action == "BUY"
+    assert decision.side == "LONG"
 def test_returns_sell_for_bearish_bos():
     structure = MarketStructure(
         is_higher_high=False,
@@ -28,6 +29,7 @@ def test_returns_sell_for_bearish_bos():
     decision = TradeDecisionEngine().decide(structure)
 
     assert decision.action == "SELL"
+    assert decision.side == "SHORT"
 
 
 def test_returns_none_when_no_bos():
@@ -43,3 +45,4 @@ def test_returns_none_when_no_bos():
     decision = TradeDecisionEngine().decide(structure)
 
     assert decision.action == "NONE"
+    assert decision.side == "NONE"

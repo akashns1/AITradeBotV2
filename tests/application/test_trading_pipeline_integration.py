@@ -1,18 +1,26 @@
-from unittest.mock import MagicMock
+from datetime import UTC, datetime
 
 from aitradebot.application.bootstrap import create_application
-from aitradebot.application.events.candle_completed_event import (
+from aitradebot.application.events import (
     CandleCompletedEvent,
+    TradeDecisionEvent,
 )
 from aitradebot.domain.common import Instrument, TimeFrame
 from aitradebot.domain.market import Candle
-from datetime import UTC, datetime
 
 
-def test_pipeline_receives_candle_completed_event():
+def test_pipeline_publishes_trade_decision_event():
     app = create_application()
 
-    app.trading_pipeline.handle_candle_completed = MagicMock()
+    received = []
+
+    def handler(event: TradeDecisionEvent):
+        received.append(event)
+
+    app.event_bus.subscribe(
+        TradeDecisionEvent,
+        handler,
+    )
 
     candle = Candle(
         instrument=Instrument("NIFTY", "NSE"),
@@ -27,7 +35,9 @@ def test_pipeline_receives_candle_completed_event():
     )
 
     app.event_bus.publish(
-        CandleCompletedEvent(candle=candle)
+        CandleCompletedEvent(
+            candle=candle,
+        )
     )
 
-    assert "Decision=" in captured.out
+    assert len(received) == 1

@@ -6,3 +6,4 @@ def test_create_application():
 
     assert app.event_bus is not None
     assert app.market_engine is not None
+    assert app.trading_pipeline is not None

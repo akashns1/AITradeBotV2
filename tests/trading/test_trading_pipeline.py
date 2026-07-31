@@ -1,5 +1,12 @@
+from aitradebot.analysis.market_structure_analyzer import (
+    MarketStructureAnalyzer,
+)
+from aitradebot.analysis.swing_detector import SwingDetector
+from aitradebot.trading.trade_decision_engine import (
+    TradeDecisionEngine,
+)
 from aitradebot.trading.trading_pipeline import TradingPipeline
-
+from aitradebot.application.events.event_bus import EventBus
 
 def test_process_returns_trade_decision(create_candle):
     candles = [
@@ -9,8 +16,13 @@ def test_process_returns_trade_decision(create_candle):
         create_candle(110),
         create_candle(106),
     ]
-
-    pipeline = TradingPipeline()
+    event_bus = EventBus()
+    pipeline = TradingPipeline(
+        event_bus=event_bus,
+        swing_detector=SwingDetector(),
+        market_structure_analyzer=MarketStructureAnalyzer(),
+        trade_decision_engine=TradeDecisionEngine(),
+    )
 
     decision = pipeline.process(candles)
 

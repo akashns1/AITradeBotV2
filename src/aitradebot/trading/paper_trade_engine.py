@@ -1,7 +1,6 @@
-from aitradebot.signals.signal_generator import TradingSignal
+from aitradebot.trading.trade_decision_engine import TradeDecision
 from aitradebot.trading.trailing_stop_manager import TrailingStopManager
 from aitradebot.trading.trade import Trade
-from aitradebot.signals.signal_generator import TradingSignal
 from aitradebot.trading.position import Position
 from aitradebot.trading.trade import Trade
 from aitradebot.trading.position_manager import PositionManager
@@ -23,16 +22,16 @@ class PaperTradeEngine:
 
     def process(
         self,
-        signal: TradingSignal,
+        decision: TradeDecision,
         current_price: float,
         stop_loss: float,
         risk_reward: float = 2.0,
-        quantity: int = 1
+        quantity: int = 1,
     ):
         if self.position is not None:
             return
 
-        if signal.action == "BUY":
+        if decision.side == "LONG":
             self.position = self.position_factory.create(
             side="LONG",
             entry_price=current_price,
@@ -41,7 +40,7 @@ class PaperTradeEngine:
             quantity=quantity,
         )
 
-        elif signal.action == "SELL":
+        elif decision.side == "SHORT":
             self.position = self.position_factory.create(
             side="SHORT",
             entry_price=current_price,

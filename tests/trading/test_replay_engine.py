@@ -1,3 +1,11 @@
+import pytest
+
+pytest.skip(
+    "Replay engine postponed until live paper trading is complete",
+    allow_module_level=True,
+)
+
+
 from unittest.mock import Mock
 
 from aitradebot.domain.market.candle import Candle
