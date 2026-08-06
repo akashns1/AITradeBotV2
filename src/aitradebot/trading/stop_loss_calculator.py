@@ -20,4 +20,4 @@ class StopLossCalculator:
 
         raise ValueError(
             f"Unsupported trade side: {decision.side}"
-        )
+        )   

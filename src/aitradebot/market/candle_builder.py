@@ -53,6 +53,11 @@ class CandleBuilder:
             return []
 
         if self._is_new_candle(tick):
+            print(
+                f"NEW CANDLE: tick={tick.timestamp}, "
+                f"current_end={self._current.end_time}"
+            )
+
             completed = self._build_completed_candle()
 
             self._start_new_candle(tick)
@@ -69,17 +74,31 @@ class CandleBuilder:
     ) -> None:
         assert self._current is not None
 
-        self._current.high = max(self._current.high, tick.price)
-        self._current.low = min(self._current.low, tick.price)
+        self._current.high = max(
+            self._current.high,
+            tick.price,
+        )
+
+        self._current.low = min(
+            self._current.low,
+            tick.price,
+        )
+
         self._current.close = tick.price
+
         self._current.volume += tick.volume
-        self._current.end_time = tick.timestamp
 
     def _get_candle_start(
         self,
         timestamp: datetime,
     ) -> datetime:
-        minute = timestamp.minute - (timestamp.minute % 2)
+        minute = (
+            timestamp.minute
+            - (
+                timestamp.minute
+                % self._timeframe.minutes
+            )
+        )
 
         return timestamp.replace(
             minute=minute,

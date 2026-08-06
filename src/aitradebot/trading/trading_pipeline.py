@@ -40,15 +40,35 @@ class TradingPipeline:
         self,
         event: CandleCompletedEvent,
     ) -> None:
+
+        print("\n========== TRADING PIPELINE ==========")
+
+        print("New Candle")
+        print(event.candle)
+
         self._candles.append(event.candle)
-        decision = self.process(self._candles)
+
+        print(f"Candle Count : {len(self._candles)}")
+
+        decision = self.process(
+            self._candles,
+        )
+
+        print("Trade Decision")
+        print(decision)
+
         if decision.side == "NONE":
+
+            print("No trade.\n")
+
             return
 
         stop_loss = self._stop_loss_calculator.calculate(
             decision,
             event.candle,
         )
+
+        print(f"Stop Loss : {stop_loss}")
 
         self._event_bus.publish(
             TradeDecisionEvent(
@@ -58,16 +78,37 @@ class TradingPipeline:
             )
         )
 
+        print("TradeDecisionEvent Published")
+        print("=====================================\n")
+
     def process(
         self,
         candles: list[Candle],
     ) -> TradeDecision:
-        swing_analysis = self._swing_detector.analyze(candles)
 
-        market_structure = self._market_structure_analyzer.analyze(
-            swing_analysis
+        swing_analysis = self._swing_detector.analyze(
+            candles,
         )
 
-        return self._trade_decision_engine.decide(
-            market_structure
+        print("\nSwing Analysis")
+        print(swing_analysis)
+
+        market_structure = (
+            self._market_structure_analyzer.analyze(
+                swing_analysis,
+            )
         )
+
+        print("\nMarket Structure")
+        print(market_structure)
+
+        decision = (
+            self._trade_decision_engine.decide(
+                market_structure,
+            )
+        )
+
+        print("\nDecision")
+        print(decision)
+
+        return decision
